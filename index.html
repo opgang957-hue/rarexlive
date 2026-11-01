@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050812">
+<title>RAREX LIVE | RAREXVAULT</title>
+
+<script src="https://cdn.dashjs.org/v4.7.4/dash.all.min.js"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#e8bd60;--blue:#168cff;--bg:#050812}
+body{
+ background:radial-gradient(ellipse at 50% 15%,#142b4d,#050812 65%);
+ color:white;font-family:Arial,sans-serif;min-height:100vh
+}
+header{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:19px 5%;border-bottom:1px solid #d5ac4b55;
+ background:#050812dd
+}
+.logo{font-size:25px;font-weight:900;font-style:italic}
+.logo span{color:var(--gold)}
+.live{color:#ff5555;font-size:12px}
+main{max-width:950px;margin:auto;padding:20px 14px}
+.hero{text-align:center;padding:25px 5px 27px}
+.hero h1{font-size:clamp(27px,6vw,45px);font-weight:900;font-style:italic}
+.hero h1 span{color:var(--gold)}
+.hero p{color:#aab5c9;letter-spacing:2px;font-size:12px;margin-top:12px}
+.player-card{
+ padding:10px;background:linear-gradient(140deg,#172b4b,#080d19);
+ border:1px solid #e5b94d;border-radius:17px;
+ box-shadow:0 0 24px #167cff25,0 0 20px #d6a84222
+}
+.player{
+ position:relative;aspect-ratio:16/9;background:#02040a;
+ border-radius:11px;overflow:hidden
+}
+video{
+ width:100%;height:100%;object-fit:contain;background:#000;
+ transition:transform .2s
+}
+.video-placeholder{
+ position:absolute;inset:0;display:flex;align-items:center;
+ justify-content:center;flex-direction:column;gap:12px;
+ background:radial-gradient(ellipse at 50% 40%,#1c365a,#050812 75%);
+ pointer-events:none
+}
+.watermark{font-size:clamp(55px,12vw,100px);font-weight:1000;
+ color:#edc15e;text-shadow:0 0 30px #d6a43d;font-style:italic}
+.video-placeholder p{font-size:11px;letter-spacing:3px;color:#aabbd2}
+.player:fullscreen{width:100%;height:100%;aspect-ratio:auto}
+.player:fullscreen video{height:100%;width:100%}
+.top-controls{
+ position:absolute;top:12px;left:12px;right:12px;
+ display:flex;justify-content:space-between;pointer-events:none
+}
+.live-tag{background:#c71919;padding:7px 12px;border-radius:6px;
+ font-size:11px;font-weight:bold}
+.controls{
+ position:absolute;bottom:0;left:0;right:0;
+ padding:35px 13px 12px;
+ background:linear-gradient(transparent,#000e 40%,#000);
+ display:flex;align-items:center;gap:13px;
+}
+.ctrl{
+ border:0;background:transparent;color:white;
+ font-size:21px;cursor:pointer;padding:3px
+}
+.ctrl:active{color:var(--gold)}
+.progress{
+ flex:1;min-width:0;height:4px;accent-color:var(--gold);
+ cursor:pointer
+}
+.time{font-size:11px;color:#ddd}
+.settings-menu{
+ position:absolute;right:12px;bottom:62px;
+ width:190px;max-height:75%;overflow:auto;
+ background:#101725f5;border:1px solid #c9a34e;
+ border-radius:10px;padding:10px;z-index:10;
+ box-shadow:0 8px 30px #000c
+}
+.settings-menu h3{color:var(--gold);font-size:12px;padding:7px}
+.quality-option{
+ display:flex;justify-content:space-between;align-items:center;
+ width:100%;padding:10px 8px;background:transparent;
+ color:white;border:0;text-align:left;cursor:pointer;font-size:13px
+}
+.quality-option:active,.quality-option:hover{background:#253653}
+.hidden{display:none!important}
+.brand{
+ text-align:center;padding:17px 0 10px;
+ font-size:clamp(55px,13vw,85px);font-weight:1000;
+ font-style:italic;color:var(--gold);
+ text-shadow:0 0 25px #b98d32
+}
+.share-heading{
+ display:flex;justify-content:center;align-items:center;gap:12px;
+ border:1px solid var(--gold);border-radius:12px;
+ padding:15px;margin:12px 0 17px;
+ color:var(--gold);font-weight:900;letter-spacing:1px;
+ font-size:clamp(14px,4vw,19px)
+}
+.socials{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.social{
+ text-decoration:none;color:white;border-radius:13px;
+ padding:17px 4px;text-align:center;background:#0c182c;
+ border:1px solid #ffffff20
+}
+.social svg{width:30px;height:30px;margin-bottom:8px}
+.social p{font-size:10px;letter-spacing:1px;font-weight:bold}
+.tg{border-color:#238dcc;color:#36a9ec}
+.wa{border-color:#208c50;color:#25d366}
+.ig{border-color:#a23c86;color:#f18bb5}
+footer{
+ margin-top:35px;border-top:1px solid #c5a04a66;
+ text-align:center;padding:25px 10px;color:#aab5c9;
+ font-size:11px;letter-spacing:2px
+}
+footer b{color:var(--gold)}
+.popup-bg{
+ position:fixed;inset:0;z-index:100;
+ background:#02050bea;backdrop-filter:blur(9px);
+ display:flex;justify-content:center;align-items:center;padding:20px
+}
+.popup{
+ max-width:370px;width:100%;text-align:center;
+ padding:27px 22px;background:linear-gradient(145deg,#173459,#080d19);
+ border:1px solid var(--gold);border-radius:19px;
+ box-shadow:0 0 35px #d7ac4533
+}
+.popup-icon{font-size:44px;color:#36a9ec}
+.popup h2{margin:13px 0;font-size:21px}
+.popup h2 span{color:var(--gold)}
+.popup p{color:#b6c2d3;font-size:13px;line-height:1.7}
+.join,.continue{
+ display:block;width:100%;padding:14px;margin-top:17px;
+ border-radius:9px;font-weight:bold;text-decoration:none;
+ cursor:pointer;font-size:12px
+}
+.join{background:linear-gradient(90deg,#d4a64f,#f7dc96);color:#080d19}
+.continue{background:#152b49;border:1px solid #ffffff33;color:white}
+.notice{text-align:center;color:#8b9cb4;font-size:10px;margin-top:12px}
+@media(max-width:400px){
+ .controls{gap:8px;padding:30px 8px 10px}
+ .ctrl{font-size:18px}
+ .social{padding:14px 2px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="popup-bg" id="popup">
+ <div class="popup">
+  <div class="popup-icon">✈</div>
+  <h2>VERIFY <span>YOURSELF</span></h2>
+  <p>BY JOINING OUR OFFICIAL TELEGRAM CHANNEL</p>
+  <p style="margin-top:12px">Join RAREXVAULT and continue to our streaming experience.</p>
+  <a class="join" href="https://t.me/+tirUqNl9KsswNTI1" target="_blank">
+   JOIN TELEGRAM CHANNEL ↗
+  </a>
+  <button class="continue" onclick="closePopup()">I'VE JOINED — CONTINUE</button>
+ </div>
+</div>
+
+<header>
+ <div class="logo">👑 RAREX <span>LIVE</span></div>
+ <div class="live">🔴 LIVE</div>
+</header>
+
+<main>
+ <section class="hero">
+  <h1>PREMIUM <span>STREAMING</span></h1>
+  <p>YOUR STREAM. YOUR EXPERIENCE.</p>
+ </section>
+
+ <section class="player-card">
+  <div class="player" id="player">
+   <video id="video" playsinline preload="metadata"></video>
+
+   <div class="video-placeholder" id="placeholder">
+    <div class="watermark">RXV</div>
+    <p>YOUR STREAM STARTS HERE</p>
+   </div>
+
+   <div class="top-controls">
+    <span class="live-tag">● LIVE</span>
+    <span style="font-size:19px">👑</span>
+   </div>
+
+   <div class="settings-menu hidden" id="settingsMenu">
+    <h3>⚙ SETTINGS — QUALITY</h3>
+    <div id="qualityOptions">
+     <button class="quality-option" onclick="selectQuality(-1)">
+      Auto <span>✓</span>
+     </button>
+    </div>
+    <h3>ROTATION</h3>
+    <button class="quality-option" onclick="rotateVideo()">↻ Rotate 90°</button>
+   </div>
+
+   <div class="controls">
+    <button class="ctrl" onclick="togglePlay()" id="playButton">▶</button>
+    <button class="ctrl" onclick="toggleMute()">🔊</button>
+    <input class="progress" type="range" id="progress"
+     min="0" max="100" value="0" oninput="seekVideo(this.value)">
+    <button class="ctrl" onclick="toggleSettings()">⚙</button>
+    <button class="ctrl" onclick="toggleFullscreen()">⛶</button>
+   </div>
+  </div>
+ </section>
+
+ <div class="brand">RXV</div>
+
+ <div class="share-heading">
+  <span>↗</span> SHARE THIS STREAM
+ </div>
+
+ <section class="socials">
+  <a class="social tg" href="https://t.me/+tirUqNl9KsswNTI1" target="_blank">
+   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 2 2.7 9.5c-1.3.5-1.3 1.2-.2 1.6l4.9 1.5 1.9 6c.2.7.1 1 .8 1 .5 0 .8-.2 1.1-.5l2.8-2.7 5.8 4.3c1.1.6 1.8.3 2-1L24 3.5C24.3 2 23.4 1.4 22 2ZM9 12.3 19.8 5.5c.5-.3.9-.1.5.2l-8.9 8.1-.3 3.2L9 12.3Z"/></svg>
+   <p>TELEGRAM</p>
+  </a>
+
+  <a class="social wa" href="https://whatsapp.com/channel/0029Vb8iP65JkK71WiJ0Eg2V" target="_blank">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-4.2A8.5 8.5 0 1 1 20 11.5Z"/><path d="M8 7.5c.5-.6 1.1-.3 1.4.3l.8 1.7c.2.4-.1.7-.6 1.1.7 1.5 1.8 2.5 3.3 3.1.4-.5.8-1.1 1.2-1l1.6.8c.7.3.8.8.4 1.4-.6.8-1.5 1.1-2.4.9-3.1-.7-6.1-3.4-6.7-6.5-.2-.7.2-1.4 1-1.8Z"/></svg>
+   <p>WHATSAPP</p>
+  </a>
+
+  <a class="social ig" href="https://www.instagram.com/rarexvault.og?dlrf=MWZuZ3gxemhybWJhaQ==" target="_blank">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1" fill="currentColor"/></svg>
+   <p>INSTAGRAM</p>
+  </a>
+ </section>
+</main>
+
+<footer>
+ POWERED BY <b>RAREXVAULT</b>
+ <p style="margin-top:10px">© 2026 RAREX LIVE</p>
+</footer>
+
+<script>
+// ADD YOUR AUTHORIZED MPD URL HERE LATER
+const STREAM_URL = "";
+
+let dashPlayer = null;
+let rotation = 0;
+
+function closePopup(){
+ document.getElementById("popup").classList.add("hidden");
+}
+
+function togglePlay(){
+ const v=document.getElementById("video");
+ if(!v.src && !STREAM_URL) return;
+ if(v.paused) v.play();
+ else v.pause();
+}
+
+function toggleMute(){
+ const v=document.getElementById("video");
+ v.muted=!v.muted;
+}
+
+function toggleSettings(){
+ document.getElementById("settingsMenu").classList.toggle("hidden");
+}
+
+function rotateVideo(){
+ rotation=(rotation+90)%360;
+ document.getElementById("video").style.transform="rotate("+rotation+"deg)";
+}
+
+async function toggleFullscreen(){
+ const p=document.getElementById("player");
+ if(!document.fullscreenElement){
+  if(p.requestFullscreen) await p.requestFullscreen();
+ }else{
+  await document.exitFullscreen();
+ }
+}
+
+function seekVideo(value){
+ const v=document.getElementById("video");
+ if(v.duration) v.currentTime=(value/100)*v.duration;
+}
+
+const video=document.getElementById("video");
+
+video.addEventListener("play",()=>{
+ document.getElementById("playButton").textContent="Ⅱ";
+});
+video.addEventListener("pause",()=>{
+ document.getElementById("playButton").textContent="▶";
+});
+video.addEventListener("timeupdate",()=>{
+ if(video.duration){
+  document.getElementById("progress").value=(video.currentTime/video.duration)*100;
+ }
+});
+
+function showQualities(){
+ if(!dashPlayer) return;
+ const list=dashPlayer.getBitrateInfoListFor("video")||[];
+ const box=document.getElementById("qualityOptions");
+ box.innerHTML="";
+
+ const auto=document.createElement("button");
+ auto.className="quality-option";
+ auto.textContent="Auto";
+ auto.onclick=()=>selectQuality(-1);
+ box.appendChild(auto);
+
+ list.forEach((track,index)=>{
+  const b=document.createElement("button");
+  b.className="quality-option";
+  const height=track.height||"?";
+  const fps=track.frameRate ? " / "+Math.round(track.frameRate)+" FPS" : "";
+  b.textContent=height+"p"+fps;
+  b.onclick=()=>selectQuality(index);
+  box.appendChild(b);
+ });
+}
+
+function selectQuality(index){
+ if(!dashPlayer) return;
+ if(index===-1){
+  dashPlayer.updateSettings({streaming:{abr:{autoSwitchBitrate:{video:true}}}});
+ }else{
+  dashPlayer.updateSettings({streaming:{abr:{autoSwitchBitrate:{video:false}}}});
+  dashPlayer.setQualityFor("video",index);
+ }
+}
+
+function loadStream(){
+ if(!STREAM_URL || !window.dashjs) return;
+ dashPlayer=dashjs.MediaPlayer().create();
+ dashPlayer.initialize(video,STREAM_URL,false);
+ dashPlayer.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED,showQualities);
+ document.getElementById("placeholder").classList.add("hidden");
+}
+
+loadStream();
+</script>
+
+</body>
+</html>
