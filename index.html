@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080B14">
+<title>RAREX LIVE | Premium Streaming</title>
+
+<script src="https://cdn.dashjs.org/v4.7.4/dash.all.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--gold:#e7bd65;
+--blue:#173b70;
+--bg:#080b14;
+--card:#101827;
+--muted:#8995a9;
+}
+body{
+background:radial-gradient(ellipse at top,#152849 0%,#080b14 55%);
+color:white;font-family:Arial,sans-serif;
+min-height:100vh;
+}
+header{
+display:flex;justify-content:space-between;
+align-items:center;padding:20px 6%;
+border-bottom:1px solid #ffffff18;
+background:#080b14cc;
+}
+.logo{font-size:24px;font-weight:900;letter-spacing:2px}
+.logo span{color:var(--gold)}
+.live{color:#ff5555;font-size:11px;letter-spacing:2px}
+.live:before{content:"● ";animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+.hero{text-align:center;padding:38px 15px 25px}
+.hero h1{font-size:32px;letter-spacing:2px}
+.hero h1 span{color:var(--gold)}
+.hero p{color:var(--muted);margin-top:12px;font-size:13px}
+.container{max-width:850px;margin:auto;padding:15px}
+.player-card{
+background:linear-gradient(145deg,#14243e,#0b101d);
+border:1px solid #d6ae5635;
+border-radius:18px;padding:14px;
+box-shadow:0 15px 50px #0008;
+}
+.player-top{
+display:flex;justify-content:space-between;
+align-items:center;padding:7px 3px 15px;
+}
+.player-top h3{font-size:14px;letter-spacing:1px}
+.status{color:#ff6868;font-size:11px}
+.video-wrap{
+position:relative;background:#000;
+border-radius:12px;overflow:hidden;
+aspect-ratio:16/9;
+display:flex;align-items:center;justify-content:center;
+}
+video{width:100%;height:100%;object-fit:contain}
+.placeholder{
+position:absolute;text-align:center;
+pointer-events:none;color:white;
+}
+.play-icon{
+font-size:48px;color:var(--gold);
+margin-bottom:10px;
+}
+.placeholder p{font-size:12px;color:#aab4c6}
+.url-area{margin-top:17px}
+.url-area label{
+display:block;color:var(--gold);
+font-size:12px;margin-bottom:9px;
+letter-spacing:1px;
+}
+input{
+width:100%;padding:15px;
+border:1px solid #293b5c;
+border-radius:10px;background:#080e1b;
+color:white;outline:none;font-size:13px;
+}
+input:focus{border-color:var(--gold)}
+button{
+cursor:pointer;border:0;border-radius:10px;
+padding:14px;font-weight:bold;
+}
+.play-btn{
+width:100%;margin-top:10px;
+background:linear-gradient(100deg,#d5a64e,#f5d88e);
+color:#101522;font-size:14px;
+}
+.error{color:#ff8585;font-size:12px;margin-top:10px}
+.section-title{
+text-align:center;margin:30px 0 17px;
+font-size:17px;letter-spacing:1px;
+}
+.section-title span{color:var(--gold)}
+.share-grid{
+display:grid;grid-template-columns:repeat(3,1fr);
+gap:12px;
+}
+.social{
+text-decoration:none;color:white;
+background:#101a2c;border:1px solid #ffffff15;
+border-radius:13px;padding:18px 5px;
+text-align:center;transition:.2s;
+}
+.social:hover{border-color:var(--gold);transform:translateY(-3px)}
+.social .symbol{font-size:27px;margin-bottom:9px}
+.social p{font-size:11px;letter-spacing:1px}
+.telegram{color:#39a9ed}
+.whatsapp{color:#25d366}
+.instagram{color:#f18bb3}
+.share-btn{
+width:100%;margin-top:15px;
+background:#14294b;color:#fff;
+border:1px solid #d8b45e66;
+}
+footer{
+text-align:center;padding:35px 10px;
+color:#8290a5;font-size:11px;
+letter-spacing:2px;
+}
+footer span{color:var(--gold)}
+/* Telegram popup */
+.overlay{
+position:fixed;inset:0;z-index:1000;
+background:#02050be8;backdrop-filter:blur(10px);
+display:flex;align-items:center;justify-content:center;
+padding:20px;
+}
+.popup{
+width:100%;max-width:370px;
+background:linear-gradient(145deg,#152c4d,#0b101b);
+border:1px solid #e5bc60;
+border-radius:20px;padding:28px 22px;
+text-align:center;
+box-shadow:0 15px 70px #000;
+}
+.tg-icon{font-size:48px;color:#39a9ed}
+.popup h2{font-size:20px;margin:14px 0 10px}
+.popup h2 span{color:var(--gold)}
+.popup p{font-size:13px;color:#aab5c7;line-height:1.7}
+.join-btn{
+display:block;text-decoration:none;
+background:linear-gradient(100deg,#d4a64e,#f5d88e);
+color:#101522;padding:15px;
+border-radius:10px;font-weight:bold;
+margin-top:22px;font-size:13px;
+}
+.continue-btn{
+background:#1b3456;color:white;
+width:100%;margin-top:12px;
+border:1px solid #ffffff22;
+}
+.hidden{display:none!important}
+@media(max-width:480px){
+.hero h1{font-size:26px}
+.container{padding:12px}
+header{padding:17px 15px}
+.share-grid{gap:8px}
+.social{padding:15px 3px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay" id="telegramPopup">
+ <div class="popup">
+  <div class="tg-icon">✈</div>
+  <h2>VERIFY <span>YOURSELF</span></h2>
+  <p>BY JOINING OUR OFFICIAL TELEGRAM CHANNEL</p>
+  <p style="margin-top:12px">Join RAREXVAULT to continue to the streaming experience.</p>
+  <a class="join-btn"
+  href="https://t.me/+tirUqNl9KsswNTI1"
+  target="_blank">JOIN TELEGRAM CHANNEL ↗</a>
+  <button class="continue-btn"
+  onclick="document.getElementById('telegramPopup').classList.add('hidden')">
+  I'VE JOINED — CONTINUE
+  </button>
+ </div>
+</div>
+
+<header>
+ <div class="logo">RAREX<span>LIVE</span></div>
+ <div class="live">LIVE EXPERIENCE</div>
+</header>
+
+<div class="hero">
+ <h1>PREMIUM <span>STREAMING</span></h1>
+ <p>YOUR STREAM. YOUR EXPERIENCE. POWERED BY RAREXVAULT.</p>
+</div>
+
+<main class="container">
+ <div class="player-card">
+
+  <div class="player-top">
+   <h3>◈ LIVE PLAYER</h3>
+   <span class="status">● PLAYER READY</span>
+  </div>
+
+  <div class="video-wrap">
+   <video id="video" controls playsinline></video>
+   <div class="placeholder" id="placeholder">
+    <div class="play-icon">▶</div>
+    <strong>RAREX LIVE</strong>
+    <p style="margin-top:9px">YOUR STREAM STARTS HERE</p>
+   </div>
+  </div>
+
+  <div class="url-area">
+   <label>ENTER YOUR AUTHORIZED MPD STREAM URL</label>
+   <input id="mpdUrl" type="url"
+   placeholder="https://example.com/stream.mpd">
+   <button class="play-btn" onclick="startStream()">
+   ▶ &nbsp; START STREAM
+   </button>
+   <div class="error" id="error"></div>
+  </div>
+
+ </div>
+
+ <h2 class="section-title">SHARE <span>THE STREAM</span></h2>
+
+ <div class="share-grid">
+  <a class="social telegram"
+  href="https://t.me/+tirUqNl9KsswNTI1" target="_blank">
+   <div class="symbol">✈</div>
+   <p>TELEGRAM</p>
+  </a>
+
+  <a class="social whatsapp"
+  href="https://whatsapp.com/channel/0029Vb8iP65JkK71WiJ0Eg2V"
+  target="_blank">
+   <div class="symbol">◉</div>
+   <p>WHATSAPP</p>
+  </a>
+
+  <a class="social instagram"
+  href="https://www.instagram.com/rarexvault.og?dlrf=MWZuZ3gxemhybWJhaQ=="
+  target="_blank">
+   <div class="symbol">◎</div>
+   <p>INSTAGRAM</p>
+  </a>
+ </div>
+
+ <button class="share-btn" onclick="shareStream()">
+  ↗ &nbsp; SHARE THIS STREAM
+ </button>
+
+</main>
+
+<footer>
+ <div>POWERED BY <span>RAREXVAULT</span></div>
+ <p style="margin-top:10px">© 2026 RAREX LIVE • ALL RIGHTS RESERVED</p>
+</footer>
+
+<script>
+let player = null;
+
+async function startStream(){
+ const url=document.getElementById('mpdUrl').value.trim();
+ const error=document.getElementById('error');
+ const video=document.getElementById('video');
+ const placeholder=document.getElementById('placeholder');
+
+ error.textContent='';
+
+ if(!url || !url.toLowerCase().includes('.mpd')){
+  error.textContent='Please enter a valid MPD stream URL.';
+  return;
+ }
+
+ if(!window.dashjs){
+  error.textContent='Player library failed to load. Refresh and try again.';
+  return;
+ }
+
+ if(player){
+  player.reset();
+  player=null;
+ }
+
+ placeholder.classList.add('hidden');
+
+ player=dashjs.MediaPlayer().create();
+ player.initialize(video,url,false);
+
+ player.on(dashjs.MediaPlayer.events.ERROR,function(e){
+  error.textContent='Stream error. Check URL, CORS, format and permissions.';
+ });
+
+ video.play().catch(()=>{
+  error.textContent='Press the video play button to start playback.';
+ });
+}
+
+async function shareStream(){
+ const data={
+  title:'RAREX LIVE',
+  text:'Watch on RAREX LIVE',
+  url:window.location.href
+ };
+ if(navigator.share){
+  try{await navigator.share(data)}catch(e){}
+ }else{
+  try{
+   await navigator.clipboard.writeText(window.location.href);
+   alert('Stream link copied!');
+  }catch(e){
+   prompt('Copy your website link:',window.location.href);
+  }
+ }
+}
+</script>
+
+</body>
+  </html>
+  
