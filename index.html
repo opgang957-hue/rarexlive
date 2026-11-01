@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050914">
+<title>RAREX LIVE</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#050914;color:white;font-family:Arial,sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 50% 0%,#123568,transparent 55%),linear-gradient(140deg,#030711,#09172c,#030711)}
+#particles{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1}
+.particle{position:absolute;width:3px;height:3px;background:#e8bd65;border-radius:50%;box-shadow:0 0 12px #e8bd65;animation:float linear infinite}
+@keyframes float{from{transform:translateY(105vh);opacity:0}20%{opacity:.8}to{transform:translateY(-10vh);opacity:0}}
+header{padding:18px 7%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #ffffff20;background:#050914aa;backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:43px;height:43px;border:1px solid #e8bd65;border-radius:12px;display:grid;place-items:center;color:#e8bd65;font-weight:900;font-size:20px}
+.brand h2{font-size:20px;letter-spacing:2px}.brand h2 span{color:#e8bd65}
+.live{color:#ff6b6b;font-size:11px;border:1px solid #ff6b6b66;padding:8px 12px;border-radius:30px}
+.hero{text-align:center;padding:45px 12px 25px}
+.eyebrow{color:#e8bd65;letter-spacing:5px;font-size:11px;margin-bottom:14px}
+.hero h1{font-size:clamp(30px,6vw,53px);letter-spacing:2px}
+.hero h1 span{color:#e8bd65;text-shadow:0 0 25px #e8bd6555}
+.hero p{color:#9caec7;font-size:12px;letter-spacing:2px;margin-top:12px}
+.stadium{max-width:900px;margin:25px auto;padding:0 16px}
+.matchbar{display:flex;justify-content:space-between;padding:14px;background:#101d32;border:1px solid #ffffff20;border-radius:12px 12px 0 0;font-size:11px;letter-spacing:1px;color:#c3d2e7}
+.matchbar span:last-child{color:#e8bd65}
+.player{position:relative;aspect-ratio:16/9;background:#000;border:1px solid #e8bd65;box-shadow:0 0 28px #168cff35;overflow:hidden}
+video{width:100%;height:100%;display:block;background:#000;object-fit:contain}
+.placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;pointer-events:none;background:radial-gradient(ellipse at center,#102d50,#050914 75%)}
+.placeholder .bat{font-size:65px;filter:drop-shadow(0 0 20px #e8bd6577)}
+.placeholder h2{font-size:clamp(24px,5vw,42px);letter-spacing:5px;color:#e8bd65}
+.placeholder p{font-size:10px;letter-spacing:3px;color:#a8bdd9}
+.corner{position:absolute;top:13px;left:13px;background:#d82e36;font-size:10px;padding:6px 10px;border-radius:4px}
+.controls{position:absolute;bottom:0;left:0;right:0;padding:14px 13px 12px;background:linear-gradient(transparent,#000e 35%,#000f);display:flex;align-items:center;gap:13px;z-index:2}
+.ctrl{border:0;background:none;color:white;cursor:pointer;display:grid;place-items:center;padding:3px}
+.ctrl svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ctrl:hover{color:#e8bd65}
+.volume{width:75px;accent-color:#e8bd65;cursor:pointer}
+.spacer{flex:1}
+.time{font-size:11px;color:#ddd}
+.playerbottom{padding:13px 16px;background:#0b172a;border:1px solid #ffffff16;border-top:0;display:flex;justify-content:space-between;font-size:11px;color:#9eafc8}
+.playerbottom strong{color:#e8bd65}
+.brandline{text-align:center;margin:27px 0;color:#e8bd65;font-size:27px;font-weight:900;letter-spacing:8px;text-shadow:0 0 20px #e8bd6566}
+.share{text-align:center;padding:0 15px 35px}
+.share h3{font-size:13px;letter-spacing:3px;margin-bottom:17px}
+.sharebtn{padding:13px 28px;border:1px solid #e8bd65;border-radius:8px;background:linear-gradient(120deg,#9b6d24,#e8bd65);color:#101010;font-weight:900;cursor:pointer}
+.socials{display:flex;justify-content:center;flex-wrap:wrap;gap:13px;margin-top:25px}
+.social{display:flex;align-items:center;gap:10px;text-decoration:none;color:white;padding:12px 17px;border:1px solid #ffffff25;border-radius:10px;background:#ffffff09;font-size:12px;font-weight:bold;transition:.25s}
+.social:hover{transform:translateY(-4px);border-color:#e8bd65}
+.social svg{width:23px;height:23px}
+.telegram svg{fill:#2AABEE}
+.whatsapp svg{fill:#25D366}
+.instagram svg{fill:none;stroke:url(#ig);stroke-width:2.3}
+footer{text-align:center;padding:22px 10px 28px;border-top:1px solid #ffffff15;color:#70819b;font-size:10px;letter-spacing:2px}
+footer span{color:#e8bd65}
+.modal{position:fixed;inset:0;z-index:10;background:#020611ed;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(12px)}
+.modalbox{width:100%;max-width:380px;text-align:center;background:linear-gradient(145deg,#12223b,#070d19);border:1px solid #d6ad5a77;border-radius:18px;padding:32px 23px}
+.modalbox .icon{font-size:40px;margin-bottom:15px}
+.modalbox h2{font-size:19px;color:#e8bd65}
+.modalbox p{font-size:12px;color:#aabbd2;line-height:1.7;margin:13px 0 22px}
+.join,.continue{display:block;width:100%;padding:13px;border-radius:8px;font-weight:bold;text-decoration:none;cursor:pointer}
+.join{background:#e8bd65;color:#090d15}
+.continue{margin-top:10px;background:#ffffff0b;color:white;border:1px solid #ffffff30}
+@media(max-width:600px){header{padding:15px 18px}.brand h2{font-size:17px}.hero{padding-top:38px}.volume{width:55px}.controls{gap:9px;padding:10px}.social{padding:11px 13px;font-size:10px}}
+</style>
+</head>
+<body>
+<div id="particles"></div>
+<header>
+ <div class="brand"><div class="logo">RXV</div><h2>RAREX <span>LIVE</span></h2></div>
+ <div class="live">● LIVE ZONE</div>
+</header>
+
+<section class="hero">
+ <div class="eyebrow">THE HOME OF CRICKET</div>
+ <h1>PREMIUM <span>CRICKET</span></h1>
+ <p>EVERY MOMENT. EVERY MATCH. ONE DESTINATION.</p>
+</section>
+
+<main class="stadium">
+ <div class="matchbar"><span>🏏 RAREX BROADCAST</span><span>● LIVE STREAMING</span></div>
+ <div class="player" id="player">
+  <video id="video" playsinline preload="metadata"></video>
+  <div class="placeholder" id="placeholder">
+   <div class="corner">● LIVE</div>
+   <div class="bat">🏏</div>
+   <h2>RAREX LIVE</h2>
+   <p>YOUR CRICKET EXPERIENCE</p>
+  </div>
+  <div class="controls">
+   <button class="ctrl" id="playBtn" aria-label="Play">
+    <svg id="playIcon" viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="currentColor" stroke="none"/></svg>
+   </button>
+   <button class="ctrl" id="muteBtn" aria-label="Mute">
+    <svg viewBox="0 0 24 24"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15 9a5 5 0 010 6M18 6a9 9 0 010 12"/></svg>
+   </button>
+   <input class="volume" id="volume" type="range" min="0" max="1" step=".05" value="1" aria-label="Volume">
+   <span class="time" id="time">00:00</span>
+   <div class="spacer"></div>
+   <button class="ctrl" id="fullBtn" aria-label="Fullscreen">
+    <svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg>
+   </button>
+  </div>
+ </div>
+ <div class="playerbottom"><span>POWERED BY <strong>RXV</strong></span><span>PREMIUM BROADCAST</span></div>
+</main>
+
+<div class="brandline">R X V</div>
+<section class="share">
+ <h3>SHARE THIS STREAM</h3>
+ <button class="sharebtn" onclick="shareStream()">↗ &nbsp; SHARE STREAM</button>
+ <div class="socials">
+  <a class="social telegram" href="https://t.me/+tirUqNl9KsswNTI1" target="_blank" rel="noopener">
+   <svg viewBox="0 0 24 24"><path d="M21.8 4.2L18.5 20c-.25 1.12-.9 1.4-1.83.87l-5.05-3.72-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.14 9.36-8.45c.4-.36-.09-.56-.62-.2L5.7 13.3.73 11.75c-1.08-.34-1.1-1.08.23-1.61L20.4 2.6c.9-.33 1.7.22 1.4 1.6z"/></svg>
+   TELEGRAM
+  </a>
+  <a class="social whatsapp" href="https://whatsapp.com/channel/0029Vb8iP65JkK71WiJ0Eg2V" target="_blank" rel="noopener">
+   <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.5 15.3L2 22l4.9-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.8c-.1.2-.3.2-.5.1a6.5 6.5 0 01-1.9-1.2 7 7 0 01-1.3-1.6c-.1-.2 0-.3.1-.4l.4-.5c.1-.1.2-.3.2-.4s0-.3-.1-.4l-.7-1.7c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4a9 9 0 003.5 3.1c.5.2.9.4 1.2.5.5.2 1 .2 1.3.1.4-.1 1.4-.6 1.6-1.2.2-.6.2-1.1.1-1.2-.1-.1-.3-.2-.5-.3z"/></svg>
+   WHATSAPP
+  </a>
+  <a class="social instagram" href="https://www.instagram.com/rarexvault.og?dlrf=MWZuZ3gxemhybWJhaQ==" target="_blank" rel="noopener">
+   <svg viewBox="0 0 24 24"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#ffb347"/><stop offset=".5" stop-color="#ff3985"/><stop offset="1" stop-color="#9b5cff"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="#ff65a5" stroke="none"/></svg>
+   INSTAGRAM
+  </a>
+ </div>
+</section>
+<footer>POWERED BY <span>RAREXVAULT</span><br><br>© 2026 RAREX LIVE. ALL RIGHTS RESERVED.</footer>
+
+<div class="modal" id="telegramModal">
+ <div class="modalbox">
+  <div class="icon">✈️</div>
+  <h2>JOIN THE RXV COMMUNITY</h2>
+  <p>Join our official Telegram channel to stay updated with RAREX LIVE.</p>
+  <a class="join" href="https://t.me/+tirUqNl9KsswNTI1" target="_blank">JOIN TELEGRAM CHANNEL</a>
+  <button class="continue" onclick="document.getElementById('telegramModal').style.display='none'">I'VE JOINED — CONTINUE</button>
+ </div>
+</div>
+
+<script src="https://cdn.dashjs.org/v4.7.4/dash.all.min.js"></script>
+<script>
+const STREAM_URL = "";
+const video=document.getElementById("video");
+const placeholder=document.getElementById("placeholder");
+const playBtn=document.getElementById("playBtn");
+const playIcon=document.getElementById("playIcon");
+const volume=document.getElementById("volume");
+const muteBtn=document.getElementById("muteBtn");
+
+function updatePlayIcon(){
+ if(video.paused){
+  playIcon.innerHTML='<path d="M7 4l13 8-13 8z" fill="currentColor" stroke="none"/>';
+  playBtn.setAttribute("aria-label","Play");
+ }else{
+  playIcon.innerHTML='<path d="M7 5h4v14H7zM15 5h4v14h-4z" fill="currentColor" stroke="none"/>';
+  playBtn.setAttribute("aria-label","Pause");
+ }
+}
+playBtn.addEventListener("click",()=>{
+ if(video.paused) video.play().catch(()=>{});
+ else video.pause();
+});
+video.addEventListener("play",updatePlayIcon);
+video.addEventListener("pause",updatePlayIcon);
+
+volume.addEventListener("input",()=>{
+ video.volume=Number(volume.value);
+ video.muted=video.volume===0;
+});
+muteBtn.addEventListener("click",()=>{
+ video.muted=!video.muted;
+ volume.value=video.muted?0:video.volume;
+ muteBtn.style.color=video.muted?"#e8bd65":"white";
+});
+document.getElementById("fullBtn").addEventListener("click",()=>{
+ const player=document.getElementById("player");
+ if(!document.fullscreenElement){
+  if(player.requestFullscreen) player.requestFullscreen();
+  else if(video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+ }else document.exitFullscreen();
+});
+video.addEventListener("loadedmetadata",()=>{
+ placeholder.style.display="none";
+});
+video.addEventListener("playing",()=>{
+ placeholder.style.display="none";
+});
+if(STREAM_URL.trim() && window.dashjs){
+ const dash=dashjs.MediaPlayer().create();
+ dash.initialize(video,STREAM_URL,true);
+}
+function shareStream(){
+ if(navigator.share){
+  navigator.share({title:"RAREX LIVE",text:"Watch on RAREX LIVE!",url:location.href}).catch(()=>{});
+ }else{
+  navigator.clipboard.writeText(location.href).then(()=>alert("Link copied!")).catch(()=>alert(location.href));
+ }
+}
+const box=document.getElementById("particles");
+for(let i=0;i<40;i++){
+ const p=document.createElement("div");
+ p.className="particle";
+ p.style.left=Math.random()*100+"%";
+ p.style.animationDuration=(8+Math.random()*13)+"s";
+ p.style.animationDelay=(-Math.random()*18)+"s";
+ box.appendChild(p);
+}
+</script>
+</body>
+</html>
